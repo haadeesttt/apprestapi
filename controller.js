@@ -1,32 +1,36 @@
 'use strict';
 
-var response = require('./res');
-var connection = require('./connect');
+const response = require('./res');
+const conn = require('./connect');
 
-exports.index = function (req, res) {
-    response.ok("Aplikasi REST API ku berjalan", res)
+// Menampilkan pesan bahwa aplikasi REST API berjalan
+exports.index = (req, res) => {
+    response.ok("Aplikasi REST API ku berjalan", res);
 };
 
-// menampilkan semua data mahasiswa
-exports.tampilsemuamahasiswa = function (req, res) {
-    connection.query('SELECT * FROM mahasiswa',
-        function (error, rows, fields) {
+// Menampilkan semua data mahasiswa
+exports.tampilSemuaMahasiswa = (req, res) => {
+    const query = 'SELECT * FROM mahasiswa';
+    conn.query(query,
+        (error, rows, fields) => {
             if (error) {
-                console.log(error)
+                console.error(error);
+                response.ok("Terjadi kesalahan pada server", res);
             } else {
-                response.ok(rows, res)
+                response.ok(rows, res);
             }
         });
 };
+
 
 // menampikan semua data mahasiswa berdasarkan id
 exports.tampilsesuaiid = function (req, res) {
     let id = req.params.id;
 
-    connection.query('SELECT * FROM mahasiswa WHERE id_mahasiswa = ?', [id],
-        function (error, rows, fields) {
+    conn.query(`SELECT * FROM mahasiswa WHERE id_mahasiswa = ${id}`,
+        (error, rows, fields) => {
             if (error) {
-                console.log(error);
+                console.error(error);
             } else {
                 response.ok(rows, res)
             }
@@ -39,7 +43,7 @@ exports.tambahmahasiswa = function (req, res) {
     var nama = req.body.nama;
     var jurusan = req.body.jurusan;
 
-    connection.query('INSERT INTO mahasiswa (nim,nama,jurusan) VALUES (?,?,?)',
+    conn.query('INSERT INTO mahasiswa (nim,nama,jurusan) VALUES (?,?,?)',
         [nim, nama, jurusan],
         function (error, rows, fields) {
             if (error) {
@@ -57,7 +61,7 @@ exports.ubahMahasiswa = function (req, res) {
     var nama = req.body.nama;
     var jurusan = req.body.jurusan;
 
-    connection.query('UPDATE mahasiswa SET nim=?, nama=?, jurusan=? WHERE id_mahasiswa=?', [nim, nama, jurusan, id],
+    conn.query('UPDATE mahasiswa SET nim=?, nama=?, jurusan=? WHERE id_mahasiswa=?', [nim, nama, jurusan, id],
         function (error, rows, fields) {
             if (error) {
                 console.log(error)
@@ -71,7 +75,7 @@ exports.ubahMahasiswa = function (req, res) {
 exports.hapusMahasiswa = function (req, res) {
     var id = req.body.id_mahasiswa;
 
-    connection.query('DELETE FROM mahasiswa WHERE id_mahasiswa=?', [id],
+    conn.query('DELETE FROM mahasiswa WHERE id_mahasiswa=?', [id],
         function (error, rows, fields) {
             if (error) {
                 console.log(error)
@@ -83,7 +87,7 @@ exports.hapusMahasiswa = function (req, res) {
 
 // menampilkan matakuliah group
 exports.tampilGroupMatakuliah = function (req, res) {
-    connection.query('SELECT mahasiswa.id_mahasiswa, mahasiswa.nim, mahasiswa.nama, mahasiswa.jurusan, matakuliah.matakuliah, matakuliah.sks FROM krs JOIN matakuliah JOIN mahasiswa WHERE krs.id_mahasiswa = mahasiswa.id_mahasiswa AND krs.id_matakuliah = matakuliah.id_matakuliah ORDER BY mahasiswa.id_mahasiswa',
+    conn.query('SELECT mahasiswa.id_mahasiswa, mahasiswa.nim, mahasiswa.nama, mahasiswa.jurusan, matakuliah.matakuliah, matakuliah.sks FROM krs JOIN matakuliah JOIN mahasiswa WHERE krs.id_mahasiswa = mahasiswa.id_mahasiswa AND krs.id_matakuliah = matakuliah.id_matakuliah ORDER BY mahasiswa.id_mahasiswa',
         function (error, rows, fields) {
             if (error) {
                 console.log(error)

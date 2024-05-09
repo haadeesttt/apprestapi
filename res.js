@@ -1,17 +1,16 @@
-'use strict';
+'use strict'; // masuk strict mode
 
-exports.ok = function (values, res) {
-    var data = {
-        'status': 200,
-        'values': values
-    };
+exports.ok = (values, res) => {
+    const data = {
+        status: 200,
+        values: values
+    }
 
     res.json(data);
-    res.end();
 }
 
 // response untuk nested matakuliah
-exports.okNested = function (values, res) {
+exports.okNested = (values, res) => {
     // lakukan akumulasi
     const hasil = values.reduce((akumulasikan, item) => {
         // tentukan key grup

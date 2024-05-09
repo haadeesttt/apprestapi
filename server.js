@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 var morgan = require('morgan');
 const app = express()
 
-//parse application/json
+// parse application/json
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 

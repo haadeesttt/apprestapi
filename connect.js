@@ -1,6 +1,6 @@
-var mysql = require('mysql');
+const mysql = require('mysql');
 
-//untuk koneksi ke database
+// Membuat koneksi MySQL
 const conn = mysql.createConnection({
     host: 'localhost',
     user: 'root',
@@ -8,12 +8,26 @@ const conn = mysql.createConnection({
     database: 'dbmahasiswa'
 });
 
-conn.connect(err => {
-    if(err){
-        throw err;
-    } else {
+// Fungsi untuk menghubungkan ke database
+const connectToDatabase = async () => {
+    try {
+        await new Promise((resolve, reject) => {
+            conn.connect((error) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve();
+                }
+            });
+        });
         console.log('MySQL terkoneksi');
+    } catch (error) {
+        console.error('Koneksi ke database gagal:', error);
     }
-});
+};
 
+// Memanggil fungsi untuk menghubungkan ke database
+connectToDatabase();
+
+// Export koneksi
 module.exports = conn;
