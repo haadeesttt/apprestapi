@@ -46,7 +46,7 @@ exports.registrasi = function (req, res) {
 }
 
 // controller untuk login
-exports.login = function(req, res){
+exports.login = function (req, res) {
     var post = {
         email: req.body.email,
         password: req.body.password
@@ -57,11 +57,11 @@ exports.login = function(req, res){
 
     query = mysql.format(query, table);
 
-    connection.query(query, function(error, rows){
-        if(error){
+    connection.query(query, function (error, rows) {
+        if (error) {
             console.log(error)
         } else {
-            if(rows.length == 1){
+            if (rows.length == 1) {
                 var token = jwt.sign({}, config.secret, {
                     expiresIn: 1440
                 });
@@ -78,8 +78,8 @@ exports.login = function(req, res){
                 var table = ["akses_token"];
 
                 query = mysql.format(query, table);
-                connection.query(query, data, function(error, rows){
-                    if(error){
+                connection.query(query, data, function (error, rows) {
+                    if (error) {
                         console.log(error)
                     } else {
                         res.json({
@@ -91,8 +91,12 @@ exports.login = function(req, res){
                     }
                 })
             } else {
-                res.json({"Error": true, "Message": "Email atau password salah!"})
+                res.json({ "Error": true, "Message": "Email atau password salah!" })
             }
         }
     })
+}
+
+exports.halamanRahasia = function (req, res) {
+    response.ok("Halaman ini hanya untuk user dengan role = 2!", res);
 }
